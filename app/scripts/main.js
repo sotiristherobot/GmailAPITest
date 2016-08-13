@@ -51,7 +51,8 @@ function handleAuthClick(event) {
  * is loaded.
  */
 function loadGmailApi() {
-  gapi.client.load('gmail', 'v1', listLabels);
+  //gapi.client.load('gmail', 'v1', listLabels);
+  gapi.client.load('gmail', 'v1', listMessages);
 }
 
 /**
@@ -78,6 +79,38 @@ function listLabels() {
       appendPre('No Labels found.');
     }
   });
+}
+
+function getMessage(messageId){
+
+  var request = gapi.client.gmail.users.messages.get({
+
+    'userId' : 'me',
+    'id' : messageId
+
+  });
+
+  request.execute(function(resp){
+
+    console.log(resp);
+
+  });
+
+}
+
+function listMessages(){
+
+  console.info("Reading Messages");
+  var request = gapi.client.gmail.users.messages.list({
+    'userId' : 'me'
+  });
+
+  request.execute(function(resp){
+
+    console.log(resp.messages[0].id);
+    getMessage(resp.messages[0].id);
+  });
+
 }
 
 /**
